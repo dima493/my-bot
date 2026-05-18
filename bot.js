@@ -8,7 +8,7 @@ http.createServer((req, res) => {
 }).listen(process.env.PORT || 3000);
 
 const botOptions = {
-    host: 'fill.aternos.me',
+    host: 'zander.aternos.host',
     port: 27843,
     username: 'Bot' + Math.floor(Math.random() * 100),
     offline: true,
