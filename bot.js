@@ -14,8 +14,7 @@ const botOptions = {
     username: 'Bot' + Math.floor(Math.random() * 100),
     offline: true,
     skipPing: true,
-    version: '1.21.50',
-    raknetBackend: 'js', // Обов'язково для Render
+    version: '1.21.51',
     connectTimeout: 60000
 };
 
