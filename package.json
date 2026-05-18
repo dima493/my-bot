@@ -2,6 +2,9 @@
   "name": "mc_bot",
   "version": "1.0.0",
   "main": "bot.js",
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
     "bedrock-protocol": "^3.56.1"
   }
