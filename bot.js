@@ -11,7 +11,7 @@ http.createServer((req, res) => {
 const botOptions = {
     host: 'fill.aternos.me',
     port: 27843,
-    username: 'StayOnline_Bot',
+    username: 'Bot' + Math.floor(Math.random() * 100),
     offline: true,
     skipPing: true,
     version: '1.21.50',
