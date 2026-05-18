@@ -8,7 +8,7 @@ http.createServer((req, res) => {
 
 const botOptions = {
     // ВАЖЛИВО: Натисни на (i) в Атерносі та впиши сюди Address і Port
-    host: 'fill.aternos.me', 
+    host: 'zander.aternos.host', 
     port: 27843,
     username: 'VNTU_Bot_' + Math.floor(Math.random() * 100),
     offline: true,
