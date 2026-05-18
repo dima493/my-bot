@@ -1,45 +1,52 @@
 const http = require('http');
 const bedrock = require('bedrock-protocol');
 
+// 1. Веб-сервер для стабільності на Render
 http.createServer((req, res) => {
-  res.write('Bot Status: Online');
-  res.end();
+    res.write('Bot Status: Online');
+    res.end();
 }).listen(process.env.PORT || 3000);
 
+// 2. Налаштування підключення
 const botOptions = {
-    // ВАЖЛИВО: Натисни на (i) в Атерносі та впиши сюди Address і Port
     host: 'zander.aternos.host', 
     port: 27843,
     username: 'VNTU_Bot_' + Math.floor(Math.random() * 100),
     offline: true,
     skipPing: true,
     version: '1.21.50',
-    raknetBackend: 'js' // Спробуй цей параметр обов'язково};
+    raknetBackend: 'js' // Важливо для Render
+};
 
 function createBot() {
-    console.log(`[${new Date().toLocaleTimeString()}] 🚀 Початок підключення до ${botOptions.host}:${botOptions.port}`);
+    console.log(`[${new Date().toLocaleTimeString()}] 🚀 Підключення до ${botOptions.host}...`);
     
     const client = bedrock.createClient(botOptions);
 
-    // Відстеження етапів підключення
-    client.on('connect', () => console.log('📡 Етап 1: Встановлено зв\'язок з хостом...'));
-    client.on('resource_packs_info', () => console.log('📡 Етап 2: Отримано інфо про ресурс-паки...'));
-    client.on('join', () => console.log('📡 Етап 3: Сервер прийняв бот-пакет...'));
-
     client.on('spawn', () => {
-        console.log('✅ Бот повністю заспавнився на сервері!');
+        console.log('✅ Бот успішно зайшов на сервер!');
+        
+        // Anti-AFK цикл
+        setInterval(() => {
+            if (client.status === 'open') {
+                client.write('player_auth_input', {
+                    pitch: 0, yaw: 0, position: { x: 0, y: 0, z: 0 },
+                    move_vector: { x: 0, z: 0 }, head_yaw: 0,
+                    input_data: { jump_down: false, sneak_down: true },
+                    input_mode: 'mouse', play_mode: 'normal', interaction_model: 'touch',
+                    tick: 0n, delta: { x: 0, y: 0, z: 0 }
+                });
+                console.log('📡 Пакет активності відправлено');
+            }
+        }, 45000);
     });
 
     client.on('error', (err) => {
         console.log('❌ Помилка:', err.message);
     });
 
-    client.on('disconnect', (packet) => {
-        console.log('❌ Від’єднано. Причина:', packet.reason);
-    });
-
     client.on('close', () => {
-        console.log('🔄 Закрито. Перепідключення через 30 сек...');
+        console.log('🔄 З’єднання закрите. Перепідключення через 30 сек...');
         setTimeout(createBot, 30000);
     });
 }
