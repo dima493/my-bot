@@ -7,14 +7,13 @@ http.createServer((req, res) => {
   res.end();
 }).listen(process.env.PORT || 3000);
 
-// 2. Налаштування підключення (версія 1.21.130+)
 const botOptions = {
     host: 'fill.aternos.me',
     port: 27843,
     username: 'Bot' + Math.floor(Math.random() * 100),
     offline: true,
     skipPing: true,
-    version: '1.21.51',
+    version: '1.21.50',
     connectTimeout: 60000
 };
 
