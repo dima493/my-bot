@@ -15,6 +15,8 @@ const botOptions = {
     offline: true,
     skipPing: true,
     version: '1.21.50',
+    raknetBackend: 'js', // Обов'язково для Render
+    connectTimeout: 60000
 };
 
 function createBot() {
