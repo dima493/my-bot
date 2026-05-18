@@ -14,8 +14,7 @@ const botOptions = {
     offline: true,
     skipPing: true,
     version: '1.21.50',
-    connectTimeout: 90000 // Чекаємо до 90 секунд
-};
+    raknetBackend: 'js' // Спробуй цей параметр обов'язково};
 
 function createBot() {
     console.log(`[${new Date().toLocaleTimeString()}] 🚀 Початок підключення до ${botOptions.host}:${botOptions.port}`);
