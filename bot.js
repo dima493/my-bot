@@ -22,32 +22,27 @@ function createBot() {
     const client = bedrock.createClient(botOptions);
 
     client.on('spawn', () => {
-        console.log('✅ Бот успішно зайшов на сервер!');
+    console.log('✅ Бот зайшов!');
+    
+    setInterval(() => {
+        if (client.status === 'open') {
+            client.write('player_auth_input', {
+                pitch: 0, yaw: 0,
+                position: { x: 0, y: 0, z: 0 },
+                move_vector: { x: 0, z: 0 },
+                head_yaw: 0,
+                input_data: { jump_down: false, sneak_down: true }, // Тепер він "присідає"
+                input_mode: 'mouse', play_mode: 'normal', interaction_model: 'touch',
+                tick: 0n, delta: { x: 0, y: 0, z: 0 }
+            });
+            console.log('📡 Пакет активності (Shift)');
+        }
+    }, 45000); 
+});
 
-        // 3. Логіка АНТИ-AFK (Бот буде надсилати пакети активності)
-        // Кожні 30 секунд бот "махає рукою" або оновлює свою позицію
-        setInterval(() => {
-            if (client.status === 'open') {
-                // Відправляємо пакет руху (навіть якщо стоїмо на місці)
-                // Це змушує сервер думати, що гравець активний
-                client.write('player_auth_input', {
-                    pitch: 0,
-                    yaw: 0,
-                    position: { x: 0, y: 0, z: 0 },
-                    move_vector: { x: 0, z: 0 },
-                    head_yaw: 0,
-                    input_data: { jump_down: true }, // Спроба стрибка
-                    input_mode: 'mouse',
-                    play_mode: 'normal',
-                    interaction_model: 'touch',
-                    tick: 0n,
-                    delta: { x: 0, y: 0, z: 0 }
-                });
-                console.log('📡 Пакет активності відправлено (Anti-AFK)');
-            }
-        }, 30000);
-    });
-
+client.on('disconnect', (packet) => {
+    console.log('❌ Кікнуто з причини:', packet.reason);
+});
     client.on('error', (err) => {
         console.log('❌ Помилка:', err.message);
     });
