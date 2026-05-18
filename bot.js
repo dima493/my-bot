@@ -14,8 +14,7 @@ const botOptions = {
     username: 'StayOnline_Bot',
     offline: true,
     skipPing: true,
-    version: '1.21.130', // Оновлено згідно з логами твого сервера
-    raknetBackend: 'js'   // Щоб уникнути помилок з C++ бібліотеками
+    version: '1.21.50', // Оновлено згідно з логами твого сервера
 };
 
 function createBot() {

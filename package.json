@@ -12,6 +12,7 @@
   "type": "commonjs",
   "dependencies": {
     "bedrock-protocol": "^3.56.1",
-    "mineflayer": "^4.37.1"
+    "mineflayer": "^4.37.1",
+    "raknet-native": "^1.2.3"
   }
 }
