@@ -15,7 +15,6 @@ const botOptions = {
     offline: true,
     skipPing: true,
     version: '1.21.50',
-    raknetBackend: process.env.RENDER ? 'js' : undefined, // Оновлено згідно з логами твого сервера
 };
 
 function createBot() {
