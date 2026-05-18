@@ -7,7 +7,7 @@ http.createServer((req, res) => {
 }).listen(process.env.PORT || 3000);
 
 const botOptions = {
-    host: 'zander.aternos.host',
+    host: 'steelhead.aternos.host',
     port: 27843,
     username: 'VNTU_Bot_' + Math.floor(Math.random() * 100),
     offline: true,
