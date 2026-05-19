@@ -7,13 +7,14 @@ http.createServer((req, res) => {
 }).listen(process.env.PORT || 3000);
 
 const botOptions = {
-    host: 'fill.aternos.me',
-    port: 27843,
-    username: 'VNTU_Bot_' + Math.floor(Math.random() * 100),
+    // Використовуємо динамічну адресу для обходу фільтрів
+    host: 'steelhead.aternos.host', 
+    port: 27843, // УВАГА: перевір, чи не змінився порт у вікні Connect
+    username: 'VNTU_Bot_' + Math.floor(Math.random() * 1000),
     offline: true,
     skipPing: true,
-    version: '1.21.50'
-    // raknetBackend видалено для автоматичного вибору
+    version: '1.21.50', // Залишаємо 50 для стабільності бібліотеки
+    connectTimeout: 90000 
 };
 
 function createBot() {
@@ -22,6 +23,14 @@ function createBot() {
     try {
         const client = bedrock.createClient(botOptions);
 
+        // Додай це всередину функції createBot після створення client
+        client.on('packet', (packet) => {
+            // Виводимо назву будь-якого пакету, що прийшов від сервера
+            if (packet.data.name) {
+                console.log('📡 Отримано пакет:', packet.data.name);
+            }
+        });
+        
         client.on('spawn', () => {
             console.log('✅ Бот на сервері!');
             
