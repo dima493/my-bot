@@ -1,12 +1,21 @@
-// КРИТИЧНИЙ ХАК ДЛЯ RENDER: Імітуємо успішне завантаження raknet-native в кеші Node.js
+// ЖОРСТКА ПІДМІНА МОДУЛІВ ДО БУДЬ-ЯКИХ ІМПОРТІВ
 const Module = require('module');
 const originalRequire = Module.prototype.require;
+
 Module.prototype.require = function (id) {
+    // Перехоплюємо сам raknet-native
     if (id === 'raknet-native') {
-        // Повертаємо пустий об'єкт, щоб деструктуризація { RakClient } не викликала crash
+        return { RakClient: undefined, RakServer: undefined };
+    }
+    // Перехоплюємо внутрішній модуль протоколу node-raknet
+    if (id === 'node-raknet' || id.includes('node-raknet')) {
         return {
-            RakClient: undefined,
-            RakServer: undefined
+            Client: function() {
+                this.connect = () => {};
+                this.ping = () => {};
+                this.close = () => {};
+            },
+            Server: function() {}
         };
     }
     return originalRequire.apply(this, arguments);
@@ -34,7 +43,7 @@ const botOptions = {
     offline: true,
     skipPing: true,
     version: '1.21.50',
-    raknetBackend: 'js' // Примусово використовуємо чистий JS
+    raknetBackend: 'js' // Використовуємо вбудований у бібліотеку чистий JS-рушій
 };
 
 function createBot() {
