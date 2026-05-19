@@ -1,3 +1,8 @@
+// КРИТИЧНО ДЛЯ RENDER: Повністю блокуємо C++ модуль до завантаження бібліотеки
+if (process.env.RENDER) {
+    process.env.INTERNAL_RAKNET_BACKEND = 'js';
+}
+
 const http = require('http');
 const bedrock = require('bedrock-protocol');
 
@@ -9,7 +14,7 @@ http.createServer((req, res) => {
     console.log(`[Система] HTTP сервер запущено на порту ${process.env.PORT || 3000}`);
 });
 
-// 2. Параметри підключення (оновлено з вашого скріншоту)
+// 2. Параметри підключення
 const HOST = 'fill.aternos.me'; 
 const PORT = 27843;                  
 
@@ -20,7 +25,6 @@ const botOptions = {
     offline: true,
     skipPing: true,
     version: '1.21.50',
-    // 'js' для хмари Render (захист від sendto -1), undefined (C++) для локального ПК
     raknetBackend: process.env.RENDER ? 'js' : undefined
 };
 
@@ -64,7 +68,7 @@ function createBot() {
         });
 
     } catch (e) {
-        console.log(`[${new Date().toLocaleTimeString()}] 🛑 Помилка ініціалізації: ${e.message}`);
+        console.log(`[${new Date().toLocaleTimeString()}] 🛑 Помилка ініціализации: ${e.message}`);
         setTimeout(createBot, 30000);
     }
 }
