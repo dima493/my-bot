@@ -14,7 +14,7 @@ const botOptions = {
     offline: true,
     skipPing: true,
     version: '1.21.50', // Залишаємо 50 для стабільності бібліотеки
-    connectTimeout: 90000 
+    connectTimeout: 120000
 };
 
 function createBot() {
