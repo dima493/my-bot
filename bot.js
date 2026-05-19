@@ -23,7 +23,6 @@ function createBot() {
             offline: true,
             skipPing: true,
             version: '1.21.50',
-            raknetBackend: 'js',
             connectTimeout: 120000
         });
 
