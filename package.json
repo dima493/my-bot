@@ -8,10 +8,5 @@
   },
   "dependencies": {
     "bedrock-protocol": "^3.56.1"
-  },
-  "overrides": {
-    "bedrock-protocol": {
-      "raknet-native": "$$npm_package_name"
-    }
   }
 }
