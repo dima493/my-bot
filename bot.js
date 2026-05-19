@@ -1,3 +1,17 @@
+// КРИТИЧНИЙ ХАК ДЛЯ RENDER: Імітуємо успішне завантаження raknet-native в кеші Node.js
+const Module = require('module');
+const originalRequire = Module.prototype.require;
+Module.prototype.require = function (id) {
+    if (id === 'raknet-native') {
+        // Повертаємо пустий об'єкт, щоб деструктуризація { RakClient } не викликала crash
+        return {
+            RakClient: undefined,
+            RakServer: undefined
+        };
+    }
+    return originalRequire.apply(this, arguments);
+};
+
 const http = require('http');
 const bedrock = require('bedrock-protocol');
 
@@ -20,7 +34,7 @@ const botOptions = {
     offline: true,
     skipPing: true,
     version: '1.21.50',
-    raknetBackend: 'js'
+    raknetBackend: 'js' // Примусово використовуємо чистий JS
 };
 
 function createBot() {
