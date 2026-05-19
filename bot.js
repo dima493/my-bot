@@ -1,8 +1,3 @@
-// КРИТИЧНО ДЛЯ RENDER: Повністю блокуємо C++ модуль до завантаження бібліотеки
-if (process.env.RENDER) {
-    process.env.INTERNAL_RAKNET_BACKEND = 'js';
-}
-
 const http = require('http');
 const bedrock = require('bedrock-protocol');
 
@@ -25,7 +20,7 @@ const botOptions = {
     offline: true,
     skipPing: true,
     version: '1.21.50',
-    raknetBackend: process.env.RENDER ? 'js' : undefined
+    raknetBackend: 'js'
 };
 
 function createBot() {
@@ -33,13 +28,11 @@ function createBot() {
     
     try {
         const client = bedrock.createClient(botOptions);
-
         let afkInterval;
 
         client.on('spawn', () => {
             console.log(`[${new Date().toLocaleTimeString()}] ✅ Бот успішно заспавнився на сервері.`);
             
-            // Інтервал Anti-AFK (30 секунд)
             afkInterval = setInterval(() => {
                 if (client.status === 'open') {
                     try {
@@ -68,7 +61,7 @@ function createBot() {
         });
 
     } catch (e) {
-        console.log(`[${new Date().toLocaleTimeString()}] 🛑 Помилка ініціализации: ${e.message}`);
+        console.log(`[${new Date().toLocaleTimeString()}] 🛑 Помилка ініціалізації: ${e.message}`);
         setTimeout(createBot, 30000);
     }
 }
