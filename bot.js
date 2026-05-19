@@ -1,46 +1,70 @@
 const http = require('http');
 const bedrock = require('bedrock-protocol');
 
+// 1. Веб-сервер для успішного проходження Health Check на Render
 http.createServer((req, res) => {
-    res.write('Bot Status: Online');
-    res.end();
-}).listen(process.env.PORT || 3000);
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Bot Status: Online\n');
+}).listen(process.env.PORT || 3000, () => {
+    console.log(`[Система] HTTP сервер запущено на порту ${process.env.PORT || 3000}`);
+});
+
+// 2. Параметри підключення (оновлено з вашого скріншоту)
+const HOST = 'fill.aternos.me'; 
+const PORT = 27843;                  
 
 const botOptions = {
-    host: 'chamois.aternos.host',
-    port: 27843,
+    host: HOST,
+    port: PORT,
     username: 'VNTU_Bot_' + Math.floor(Math.random() * 100),
     offline: true,
     skipPing: true,
-    version: '1.21.50'
-    // raknetBackend видалено для автоматичного вибору
+    version: '1.21.50',
+    // 'js' для хмари Render (захист від sendto -1), undefined (C++) для локального ПК
+    raknetBackend: process.env.RENDER ? 'js' : undefined
 };
 
 function createBot() {
-    console.log(`[${new Date().toLocaleTimeString()}] 🚀 Підключення...`);
+    console.log(`[${new Date().toLocaleTimeString()}] 🚀 Спроба підключення до ${HOST}:${PORT}...`);
     
     try {
         const client = bedrock.createClient(botOptions);
 
+        let afkInterval;
+
         client.on('spawn', () => {
-            console.log('✅ Бот на сервері!');
+            console.log(`[${new Date().toLocaleTimeString()}] ✅ Бот успішно заспавнився на сервері.`);
             
-            setInterval(() => {
+            // Інтервал Anti-AFK (30 секунд)
+            afkInterval = setInterval(() => {
                 if (client.status === 'open') {
-                    client.write('player_auth_input', {
-                        pitch: 0, yaw: 0, position: { x: 0, y: 0, z: 0 },
-                        move_vector: { x: 0, z: 0 }, head_yaw: 0,
-                        input_data: { jump_down: false, sneak_down: true },
-                        input_mode: 'mouse', play_mode: 'normal', interaction_model: 'touch',
-                        tick: 0n, delta: { x: 0, y: 0, z: 0 }
-                    });
+                    try {
+                        client.write('player_auth_input', {
+                            pitch: 0, yaw: 0, position: { x: 0, y: 64, z: 0 },
+                            move_vector: { x: 0, z: 0 }, head_yaw: 0,
+                            input_data: { jump_down: false, sneak_down: true },
+                            input_mode: 'mouse', play_mode: 'normal', interaction_model: 'touch',
+                            tick: 0n, delta: { x: 0, y: 0, z: 0 }
+                        });
+                    } catch (e) {
+                        console.log('⚠️ Помилка відправки Anti-AFK пакета');
+                    }
                 }
-            }, 45000);
+            }, 30000);
         });
 
-        client.on('error', (err) => console.log('❌ Помилка:', err.message));
-        client.on('close', () => setTimeout(createBot, 30000));
+        client.on('error', (err) => {
+            console.log(`[${new Date().toLocaleTimeString()}] ❌ Помилка протоколу: ${err.message}`);
+        });
+
+        client.on('close', () => {
+            if (afkInterval) clearInterval(afkInterval);
+            console.log(`[${new Date().toLocaleTimeString()}] 🔄 З'єднання втрачено. Перепідключення через 30 секунд...`);
+            setTimeout(createBot, 30000);
+        });
+
     } catch (e) {
+        console.log(`[${new Date().toLocaleTimeString()}] 🛑 Помилка ініціалізації: ${e.message}`);
         setTimeout(createBot, 30000);
     }
 }
