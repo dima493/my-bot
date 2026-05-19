@@ -1,9 +1,10 @@
 {
-  "name": "render-aternos-bot",
+  "name": "aternos-mc-bot",
   "version": "1.0.0",
+  "description": "Minecraft Bedrock Bot for Aternos",
   "main": "bot.js",
   "engines": {
-    "node": "20.x"
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "bedrock-protocol": "^3.56.1"
