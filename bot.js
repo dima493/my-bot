@@ -8,7 +8,7 @@ http.createServer((req, res) => {
 }).listen(process.env.PORT || 3000);
 
 // Конфігурація цільового сервера
-const hostAddress = 'steelhead.aternos.host'; // Замінити на поточну динамічну адресу
+const hostAddress = 'chamois.aternos.host'; // Замінити на поточну динамічну адресу
 const hostPort = 27843;                       // Замінити на поточний динамічний порт
 
 function createBot() {
