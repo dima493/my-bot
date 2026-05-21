@@ -43,7 +43,7 @@ const botOptions = {
     offline: true,
     skipPing: true,
     version: '1.21.50',
-    raknetBackend: 'js' // Використовуємо вбудований у бібліотеку чистий JS-рушій
+    raknetBackend: 'jsp-raknet' // Використовуємо вбудований у бібліотеку чистий JS-рушій
 };
 
 function createBot() {
